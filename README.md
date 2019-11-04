@@ -1,7 +1,8 @@
 ### RFI/LFI Payload List
 
+<p align="center">
 <img src="https://github.com/payloadbox/rfi-lfi-payload-list/blob/master/img/rfi-lfi.jpeg">
-</center>
+</p>
 
 As with many exploits, remote and local file inclusions are only a problem at the end of the encoding. Of course it takes a second person to have it. Now this article will hopefully give you an idea of protecting your website and most importantly your code from a file iclusion exploit. I’ll give code examples in PHP format.
 
