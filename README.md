@@ -4,6 +4,10 @@
 <img src="https://github.com/payloadbox/rfi-lfi-payload-list/blob/master/img/rfi-lfi.jpeg">
 </p>
 
+<p align="center">
+  <img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg"> <img src="https://img.shields.io/github/stars/payloadbox/rfi-lfi-payload-list?style=social"> <img src="https://img.shields.io/github/forks/payloadbox/rfi-lfi-payload-list?style=social"> <img src="https://img.shields.io/github/repo-size/payloadbox/payloadbox/rfi-lfi-payload-list"> <img src="https://img.shields.io/github/license/payloadbox/rfi-lfi-payload-list"> <img src="https://img.shields.io/github/issues/detail/author//payloadbox/rfi-lfi-payload-list/1">
+</p>
+
 As with many exploits, remote and local file inclusions are only a problem at the end of the encoding. Of course it takes a second person to have it. Now this article will hopefully give you an idea of protecting your website and most importantly your code from a file iclusion exploit. I’ll give code examples in PHP format.
 
 Let’s look at some of the code that makes RFI / LFI exploits possible.
